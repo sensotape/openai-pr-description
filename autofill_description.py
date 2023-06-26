@@ -216,6 +216,7 @@ The title of the pull request is "{pull_request_title}" and the following change
         filename = pull_request_file["filename"]
         patch = pull_request_file["patch"]
         completion_prompt += f"Base file {filename}:\n"
+        print("https://raw.githubusercontent.com/sensotape/{repo}/{base_branch}/{filename}\n")
         base_file_result = requests.get(
             "https://raw.githubusercontent.com/sensotape/{repo}/{base_branch}/{filename}",
             headers=authorization_header,
