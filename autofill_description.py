@@ -143,6 +143,9 @@ def main():
         print(issue.fields.issuetype)
         print(issue.fields.summary)
         print(issue.fields.description)
+        jira_summary = issue.fields.summary
+        jira_description = issue.fields.description
+
 
 
 
@@ -172,9 +175,17 @@ def main():
         completion_prompt = f"""
 Write a pull request description focusing on the motivation behind the change and why it improves the project.
 Go straight to the point.
-
-The title of the pull request is "{pull_request_title}" and the following changes took place: \n
 """
+    if jira_description and jira_summary:
+        completion_prompt += """
+
+        The title of the JIRA ticket associated to this pull request is "{jira_summary}" and the description is: "{jira_description}"
+        """
+
+    completion_prompt += """
+        The title of the pull request is "{pull_request_title}" and the following changes took place: \n
+    """
+
     for pull_request_file in pull_request_files:
         # Not all PR file metadata entries may contain a patch section
         # For example, entries related to removed binary files may not contain it
