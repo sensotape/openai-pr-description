@@ -12,7 +12,7 @@ Go straight to the point.
 
 The title of the pull request is "Enable valgrind on CI" and the following changes took place: 
 
-Base file .github/workflows/build-ut-coverage.yml:
+This is the original base file (before changes) .github/workflows/build-ut-coverage.yml:
 name: Build, UT, coverage
 
 on: [ push ]
@@ -215,7 +215,7 @@ The title of the pull request is "{pull_request_title}" and the following change
 
         filename = pull_request_file["filename"]
         patch = pull_request_file["patch"]
-        completion_prompt += f"Base file {filename}:\n"
+        completion_prompt += f"This is the original base file (before changes) {filename}:\n"
         base_file_link = f"https://raw.githubusercontent.com/{repo}/{base_branch}/{filename}"
         print(base_file_link)
         base_file_result = requests.get(
@@ -230,8 +230,9 @@ The title of the pull request is "{pull_request_title}" and the following change
             return 1
 
         completion_prompt += f"{base_file_result.text}\n"
-        print(f"Completion prompt so far: '{completion_prompt}'")
         completion_prompt += f"Changes in file {filename}: {patch}\n"
+
+        print(f"Completion prompt: '{completion_prompt}'")
 
     max_allowed_tokens = 4096  # 4096 is the maximum allowed by OpenAI for GPT-3.5
     characters_per_token = 4  # The average number of characters per token
