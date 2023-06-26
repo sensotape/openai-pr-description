@@ -12,7 +12,7 @@ Go straight to the point.
 
 The title of the pull request is "Enable valgrind on CI" and the following changes took place: 
 
-This is the original base file (before changes) .github/workflows/build-ut-coverage.yml:
+Base file .github/workflows/build-ut-coverage.yml:
 name: Build, UT, coverage
 
 on: [ push ]
@@ -215,7 +215,7 @@ The title of the pull request is "{pull_request_title}" and the following change
 
         filename = pull_request_file["filename"]
         patch = pull_request_file["patch"]
-        completion_prompt += f"This is the original base file (before changes) {filename}:\n"
+        completion_prompt += f"Base file {filename}:\n"
         base_file_link = f"https://raw.githubusercontent.com/{repo}/{base_branch}/{filename}"
         print(base_file_link)
         base_file_result = requests.get(
