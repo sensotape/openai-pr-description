@@ -90,6 +90,7 @@ def main():
     github_token = args.github_token
     pull_request_id = args.pull_request_id
     openai_api_key = args.openai_api_key
+    jira_token = args.jira_token
     allowed_users = os.environ.get("INPUT_ALLOWED_USERS", "")
     if allowed_users:
         allowed_users = allowed_users.split(",")
@@ -135,7 +136,7 @@ def main():
     pull_request_jira_issue_id = pull_request_title.split("-")[1]
     pull_request_jira_issue_name = pull_request_jira_project_id + "-" + pull_request_jira_issue_id
 
-    jira = JIRA(server="https://moodys-cre.atlassian.net/jira")
+    jira = JIRA(server="https://moodys-cre.atlassian.net/jira", token_auth=jira_token)
     
     if pull_request_jira_project_id and pull_request_jira_issue_id and  pull_request_jira_issue_id != "0":
         issue = jira.issue(pull_request_jira_issue_name)

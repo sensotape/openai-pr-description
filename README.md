@@ -40,12 +40,14 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          jira_token: ${{ secrets.JIRA_TOKEN }}
 ```
 
 | Input             | Description                                           | Required | Default                    |
 | ----------------- | ----------------------------------------------------- | -------- | -------------------------- |
 | `github_token`    | The GitHub token to use for the Action                | Yes      |                            |
 | `openai_api_key`  | The [OpenAI API key] to use, keep it hidden           | Yes      |                            |
+| `jira_token    `  | The Jira token to use for the Action                  | Yes      |                            |
 | `pull_request_id` | The ID of the pull request to use                     | No       | Extracted from metadata    |
 | `openai_model`    | The [OpenAI model] to use                             | No       | `gpt-3.5-turbo`            |
 | `max_tokens`      | The maximum number of **prompt tokens** to use        | No       | `1000`                     |
