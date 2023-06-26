@@ -216,7 +216,7 @@ The title of the pull request is "{pull_request_title}" and the following change
         filename = pull_request_file["filename"]
         patch = pull_request_file["patch"]
         completion_prompt += f"Base file {filename}:\n"
-        base_file_link = f"https://raw.githubusercontent.com/sensotape/{repo}/{base_branch}/{filename}\n"
+        base_file_link = f"https://raw.githubusercontent.com/{repo}/{base_branch}/{filename}\n"
         print(base_file_link)
         base_file_result = requests.get(
             base_file_link,
