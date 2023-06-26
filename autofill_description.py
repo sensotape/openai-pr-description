@@ -5,6 +5,8 @@ import argparse
 import json
 import openai
 import os
+from jira import JIRA
+
 
 SAMPLE_PROMPT = """
 Write a pull request description focusing on the motivation behind the change and why it improves the project.
@@ -129,6 +131,19 @@ def main():
             return 0
 
     pull_request_title = pull_request_data["title"]
+    pull_request_jira_project_id = pull_request_title.split("-")[0]
+    pull_request_jira_issue_id = pull_request_title.split("-")[1]
+    pull_request_jira_issue_name = pull_request_jira_project_id + "-" + pull_request_jira_issue_id
+
+    jira = JIRA(server="https://moodys-cre.atlassian.net/jira")
+    
+    if pull_request_jira_project_id and pull_request_jira_issue_id and  pull_request_jira_issue_id != "0":
+        issue = jira.issue(pull_request_jira_issue_name)
+        print(issue.fields.issuetype)
+        print(issue.fields.summary)
+        print(issue.fields.description)
+
+
 
     pull_request_files = []
     # Request a maximum of 10 pages (300 files)
