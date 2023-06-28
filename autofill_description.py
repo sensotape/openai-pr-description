@@ -5,6 +5,8 @@ import argparse
 import json
 import openai
 import os
+from jira import JIRA
+
 
 SAMPLE_PROMPT = """
 Write a pull request description focusing on the motivation behind the change and why it improves the project.
@@ -135,6 +137,7 @@ def main():
     github_token = args.github_token
     pull_request_id = args.pull_request_id
     openai_api_key = args.openai_api_key
+    jira_token = args.jira_token
     allowed_users = os.environ.get("INPUT_ALLOWED_USERS", "")
     if allowed_users:
         allowed_users = allowed_users.split(",")
@@ -177,6 +180,22 @@ def main():
             return 0
 
     pull_request_title = pull_request_data["title"]
+    pull_request_jira_project_id = pull_request_title.split("-")[0]
+    pull_request_jira_issue_id = pull_request_title.split("-")[1]
+    pull_request_jira_issue_name = pull_request_jira_project_id + "-" + pull_request_jira_issue_id
+
+    jira = JIRA(server="https://moodys-cre.atlassian.net/jira", token_auth=jira_token)
+    
+    if pull_request_jira_project_id and pull_request_jira_issue_id and  pull_request_jira_issue_id != "0":
+        issue = jira.issue(pull_request_jira_issue_name)
+        print(issue.fields.issuetype)
+        print(issue.fields.summary)
+        print(issue.fields.description)
+        jira_summary = issue.fields.summary
+        jira_description = issue.fields.description
+
+
+
 
     pull_request_files = []
     # Request a maximum of 10 pages (300 files)
@@ -204,9 +223,17 @@ def main():
         completion_prompt = f"""
 Write a pull request description focusing on the motivation behind the change and why it improves the project.
 Go straight to the point.
-
-The title of the pull request is "{pull_request_title}" and the following changes took place: \n
 """
+    if jira_description and jira_summary:
+        completion_prompt += """
+
+        The title of the JIRA ticket associated to this pull request is "{jira_summary}" and the description is: "{jira_description}"
+        """
+
+    completion_prompt += """
+        The title of the pull request is "{pull_request_title}" and the following changes took place: \n
+    """
+
     for pull_request_file in pull_request_files:
         # Not all PR file metadata entries may contain a patch section
         # For example, entries related to removed binary files may not contain it
